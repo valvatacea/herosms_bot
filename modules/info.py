@@ -1,5 +1,6 @@
 from telethon import events
 from hero_api import api
+from utils import is_allowed
 
 def register(client):
     @client.on(events.NewMessage(pattern=r'(?i)^/offers\s+([a-zA-Z]+)\s+(\d+)$', func=is_allowed))
