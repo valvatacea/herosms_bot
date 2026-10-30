@@ -1,35 +1,19 @@
-from telethon import events
+from telethon import events, Button
 from hero_api import api
+from utils import is_allowed
 
 def register(client):
-    @client.on(events.NewMessage(pattern='(?i)^/start$'))
+    @client.on(events.NewMessage(pattern='(?i)^/start$', func=is_allowed))
     async def start(event):
+        # Membuat tombol menu interaktif
+        buttons = [
+            [Button.inline("💳 Cek Saldo", b"menu_balance"), Button.inline("📋 Aktivasi Aktif", b"menu_active")],
+            [Button.inline("🕒 Riwayat Terakhir", b"menu_history")],
+            [Button.inline("🛒 Cara Beli Nomor", b"menu_help_buy")]
+        ]
         text = (
-            "🤖 **HeroSMS Full API Bot**\n\n"
-            "**Layanan SMS:**\n"
-            "`/balance` - Cek Saldo\n"
-            "`/buy <layanan> <negara>` - Beli Nomor\n"
-            "`/active` | `/history` - Daftar/Riwayat Aktivasi\n"
-            "`/cancel <id>` | `/finish <id>` - Batal/Selesai\n"
-            "`/replace <id>` - Ganti Nomor (Replace)\n"
-            "`/reactivate <id>` - Aktifkan ulang nomor lama\n"
-            "`/prolong <id> <jam>` - Perpanjang masa aktif (Sewa)\n\n"
-            "**OTP & Info:**\n"
-            "`/sms <id>` | `/sms_all <id>` - Cek OTP\n"
-            "`/offers <layanan> <negara>` - Harga & Stok\n"
-            "`/countries` | `/services` - List Kode\n\n"
-            "**Email Aktivasi:**\n"
-            "`/email_buy <situs> <domain>`\n"
-            "`/email_status <id>`\n"
-            "`/email_cancel <id>`\n"
-            "`/email_offers <situs>`"
+            "🤖 **HeroSMS Bot Interaktif**\n\n"
+            "Selamat datang! Akun Anda telah diotorisasi.\n"
+            "Silakan pilih menu di bawah ini:"
         )
-        await event.reply(text)
-
-    @client.on(events.NewMessage(pattern='(?i)^/balance$'))
-    async def balance(event):
-        res = await api.request_stub("getBalance")
-        if "ACCESS_BALANCE" in res:
-            await event.reply(f"💳 **Saldo:** ${res.split(':')[1]}")
-        else:
-            await event.reply(f"⚠️ Error: `{res}`")
+        await event.reply(text, buttons=buttons)
