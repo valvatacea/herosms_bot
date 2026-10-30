@@ -2,7 +2,7 @@ from telethon import events
 from hero_api import api
 
 def register(client):
-    @client.on(events.NewMessage(pattern=r'(?i)^/sms\s+(\d+)$'))
+    @client.on(events.NewMessage(pattern=r'(?i)^/sms\s+(\d+)$', func=is_allowed))
     async def sms(event):
         act_id = event.pattern_match.group(1)
         status, res = await api.request_v1('GET', f'/activations/{act_id}/otp/last')
