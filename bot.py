@@ -1,10 +1,9 @@
 import asyncio
 from telethon import TelegramClient
 from config import API_ID, API_HASH, BOT_TOKEN
-from modules import general, activations, otp, emails, info
+from modules import general, activations, otp, emails, info, callbacks # Tambahkan callbacks
 
 async def main():
-    # Inisialisasi client di dalam async block agar event loop sudah tersedia
     client = TelegramClient('herosms_session', API_ID, API_HASH)
 
     # Daftarkan semua handlers
@@ -13,14 +12,12 @@ async def main():
     otp.register(client)
     emails.register(client)
     info.register(client)
+    callbacks.register(client) # Registrasi modul callback (tombol inline)
 
-    # Start bot
     await client.start(bot_token=BOT_TOKEN)
-    print("🤖 Bot HeroSMS Modular sedang berjalan...")
+    print("🤖 Bot HeroSMS Interaktif (Private) berjalan...")
     
-    # Tahan agar bot terus berjalan
     await client.run_until_disconnected()
 
 if __name__ == '__main__':
-    # Jalankan event loop dengan standar Python modern
     asyncio.run(main())
