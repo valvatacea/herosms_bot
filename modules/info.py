@@ -2,7 +2,7 @@ from telethon import events
 from hero_api import api
 
 def register(client):
-    @client.on(events.NewMessage(pattern=r'(?i)^/offers\s+([a-zA-Z]+)\s+(\d+)$'))
+    @client.on(events.NewMessage(pattern=r'(?i)^/offers\s+([a-zA-Z]+)\s+(\d+)$', func=is_allowed))
     async def offers(event):
         service, country = event.pattern_match.groups()
         status, res = await api.request_v1('GET', f'/activations/offers/sms?services={service.lower()}&countries={country}')
