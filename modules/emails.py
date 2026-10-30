@@ -2,7 +2,7 @@ from telethon import events
 from hero_api import api
 
 def register(client):
-    @client.on(events.NewMessage(pattern=r'(?i)^/email_buy\s+([a-zA-Z0-9.-]+)\s+([a-zA-Z0-9.-]+)$'))
+    @client.on(events.NewMessage(pattern=r'(?i)^/email_buy\s+([a-zA-Z0-9.-]+)\s+([a-zA-Z0-9.-]+)$', func=is_allowed))
     async def email_buy(event):
         site, domain = event.pattern_match.groups()
         status, res = await api.request_v1('POST', '/emails', json={"site": site.lower(), "domain": domain.lower()})
